@@ -107,20 +107,23 @@
                         <div class="col-4">
                             <div class="mb-3">
                                 <label for="sub_total" class="form-label">Sub Total</label>
-                                <input type="number" name="sub_total" id="sub_total" disabled class="form-control">
+                                <input type="text" name="sub_total_display" id="sub_total_display" disabled class="form-control currency-format">
+                                <input type="hidden" name="sub_total" id="sub_total" disabled class="form-control">
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="mb-3">
                                 <label for="discount" class="form-label">Diskon</label>
-                                <input type="number" name="discount" value="0" id="discount" class="form-control">
+                                <input type="text" name="discount_display" value="0" id="discount_display" class="form-control currency-format">
+                                <input type="hidden" name="discount" value="0" id="discount" class="form-control ">
                             </div>
                             
                         </div>
                         <div class="col-4">
                             <div class="mb-3">
                                 <label for="total" class="form-label">TOTAL</label>
-                                <input type="number" name="total" id="total" disabled class="form-control">
+                                <input type="text" name="total_display" id="total_display" disabled class="form-control currency-format">
+                                <input type="hidden" name="total" id="total" disabled class="form-control ">
                             </div>
 
                         </div>
@@ -129,11 +132,13 @@
                         <div class="col-4">
                             <div class="mb-3">
                                 <label for="cash_paid" class="form-label">CASH</label>
-                                <input type="number" name="cash_paid" id="cash_paid" class="form-control">
+                                <input type="text" name="cash_paid_display" id="cash_paid_display" class="form-control currency-format">
+                                <input type="hidden" name="cash_paid" id="cash_paid" class="form-control">
                             </div>
                             <div class="mb-3">
                                 <label for="change" class="form-label">Kembali</label>
-                                <input type="number" name="change" id="change" disabled class="form-control">
+                                <input type="text" name="change_display" id="change_display" disabled class="form-control currency-format">
+                                <input type="hidden" name="change" id="change" disabled class="form-control">
                             </div>
                         </div>
                         <div class="col">
@@ -227,7 +232,7 @@
                                             data-code="${product.code}"
                                             data-priceid="${price.id}"
                                             >
-                                            ${price.productunit.name} - Rp ${price.sell_price}
+                                            ${price.productunit.name} - ${formatRupiah(price.sell_price)}
                                         </a>
                                     </li>`;
                                 });
@@ -237,7 +242,7 @@
                                     <div class="col-md-8">
                                         <h6 class="mb-1 fw-bold text-dark">${product.name}</h6>
                                         <div class="text-muted mb-2 flex items-center">
-                                            Rp ${product.price} / ${product.unit} 
+                                            ${formatRupiah(product.price)} / ${product.unit} 
                                             <div class="ml-2 dropdown">
                                                 <button class="btn btn-xs btn-outline-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                     <i class="fas fa-pen text-xs"></i>
@@ -258,7 +263,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-end flex justify-content-end align-items-center">
-                                        <div class="font-bold text-success mb-2 text-lg text-nowrap">Rp ${product.total}</div>
+                                        <div class="font-bold text-success mb-2 text-lg text-nowrap">${formatRupiah(product.total)}</div>
                                     </div>
                                     <button class="absolute bottom-0 right-0 btn btn-sm btn-outline-danger btn-delete-item-detail" data-code="${product.code}">
                                         <i class="fas fa-trash text-xs btn-delete-item-detail" data-code="${product.code}"></i>
@@ -377,28 +382,42 @@
 
                     const setTransactionTotal = ()=>{
                         totalEl.value = (Number(subTotalModalEl.value) || 0) - (Number(discountEl.value) || 0);
+                        let total = $('#total').val();
+                        let cash_paid = $('#cash_paid').val();
+                        
+                        $('#total_display').val(formatRupiah(total));
+                        $('#change').val(cash_paid - total);
                     }
 
                     const setTransactionSubTotal = ()=>{
                         let subTotal = productList.reduce((accumulator,currentValue) => Number(accumulator) + Number(currentValue.total), 0);
 
                         console.log(subTotal)
-                        subTotalEl.innerText = subTotal;
+                        subTotalEl.innerText = formatRupiah(subTotal);
                         subTotalModalEl.value = subTotal;
+                        $('#sub_total_display').val(formatRupiah(subTotal))
 
                         setTransactionTotal();
                     }
 
                     discountEl.addEventListener('input',()=>{
                         setTransactionSubTotal();
+                    });
+
+                    $('#discount_display').on('input',()=>{
+                        discountEl.dispatchEvent(new Event('input'));
+                    })
+                    $('#cash_paid_display').on('input',()=>{
+                        document.getElementById('cash_paid').dispatchEvent(new Event('input'));
                     })
 
 
-                    $('#cash_paid, #total').on('input',function(){
+                    $('#cash_paid, #total').on('input change',function(){
                         let total = $('#total').val();
                         let cash_paid = $('#cash_paid').val();
 
                         $('#change').val(cash_paid - total);
+                        $('#change_display').val(formatRupiah(cash_paid - total));
                     })
 
                    

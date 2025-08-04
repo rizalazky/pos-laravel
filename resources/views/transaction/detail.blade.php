@@ -18,7 +18,7 @@
                             <a href="/transaksi/penjualan">Transaksi Baru</a>
                         </button>
                         @if(($data->type == 'in' && Auth::user()->can('transaction-menu transaction-in update')) || ($data->type == 'out' && Auth::user()->can('transaction-menu transaction-out update')) )
-                            <button type="button" id="btn-submit" class="btn btn-primary mr-2">
+                            <button type="button" id="btn-update" class="btn btn-primary mr-2">
                                 <a href="/transaksi/edit/{{ $data->id }}" class='text-white'>Update</a>
                             </button>
                         @endif

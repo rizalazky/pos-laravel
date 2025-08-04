@@ -44,51 +44,51 @@
                     </div>
                 </div>
                 <div class="row">
-                            <div class="col-6">
-                                <label for="barcode-input">SCAN BARCODE</label>
-                                <input type="text" name="barcode-input" placeholder="Scan Barcode" id="barcode-input" class="form-control">
-                            </div>
-                            
-                            <div class="col-6">
-                                <label for="product_id">CARI PRODUK</label>
-                                <select id="product_id" name="product_id" class="form-control">
+                    <div class="col-6">
+                        <label for="barcode-input">SCAN BARCODE</label>
+                        <input type="text" name="barcode-input" placeholder="Scan Barcode" id="barcode-input" class="form-control">
+                    </div>
+                    
+                    <div class="col-6">
+                        <label for="product_id">CARI PRODUK</label>
+                        <select id="product_id" name="product_id" class="form-control">
 
-                                </select>
-                            </div>
-                        </div>
-                        <div class="d-flex p-2 overflow-x-auto mt-4">
-                            <button class='btn btn-outline-info btn-sm btn-category mr-2' data-id='all'>All</button>
-                            @foreach($product_categories as $category)
-                                <button class='btn btn-outline-info btn-sm btn-category mr-2 text-nowrap' data-id='{{ $category->id }}'>{{ $category->name }}</button>
-                            @endforeach
-                            
-                        </div>
-                        <div class="row mt-4">
-                            @foreach($products as $product)
-                                <div class="col-3 item-product" 
-                                    data-catid='{{ $product->category_id }}' 
-                                    data-id='{{ $product->id }}' 
-                                    data-name='{{ $product->name }}' 
-                                    data-code='{{ $product->code }}' 
-                                    data-stock='{{ $product->code }}' 
-                                    data-priceid = '{{ $product->defaultProductPrice->id ?? 0 }}'
-                                    data-price='{{ $data->type == "out" ? $product->defaultProductPrice->sell_price : $product->defaultProductPrice->buy_price }}'
-                                    data-unit ='{{ $product->defaultProductPrice->productunit->name }}'
-                                    data-productprices={{ json_encode($product->productprices) }}
-                                    >
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <img src="{{ $product->image ? asset('storage/uploads/products/images/'.$product->image) : asset('images/no-image.png') }}" class="img-fluid" alt="{{ $product->name }}">
-                                            <div class="text-left">
-                                                <strong>{{ $product->code }}</strong>
-                                                <br>
-                                                <span class="text-muted">{{ $product->name }}</span>
-                                            </div>
-                                        </div>
+                        </select>
+                    </div>
+                </div>
+                <div class="d-flex p-2 overflow-x-auto mt-4">
+                    <button class='btn btn-outline-info btn-sm btn-category mr-2' data-id='all'>All</button>
+                    @foreach($product_categories as $category)
+                        <button class='btn btn-outline-info btn-sm btn-category mr-2 text-nowrap' data-id='{{ $category->id }}'>{{ $category->name }}</button>
+                    @endforeach
+                    
+                </div>
+                <div class="row mt-4">
+                    @foreach($products as $product)
+                        <div class="col-3 item-product" 
+                            data-catid='{{ $product->category_id }}' 
+                            data-id='{{ $product->id }}' 
+                            data-name='{{ $product->name }}' 
+                            data-code='{{ $product->code }}' 
+                            data-stock='{{ $product->code }}' 
+                            data-priceid = '{{ $product->defaultProductPrice->id ?? 0 }}'
+                            data-price='{{ $data->type == "out" ? $product->defaultProductPrice->sell_price : $product->defaultProductPrice->buy_price }}'
+                            data-unit ='{{ $product->defaultProductPrice->productunit->name }}'
+                            data-productprices={{ json_encode($product->productprices) }}
+                            >
+                            <div class="card">
+                                <div class="card-body">
+                                    <img src="{{ $product->image ? asset('storage/uploads/products/images/'.$product->image) : asset('images/no-image.png') }}" class="img-fluid" alt="{{ $product->name }}">
+                                    <div class="text-left">
+                                        <strong>{{ $product->code }}</strong>
+                                        <br>
+                                        <span class="text-muted">{{ $product->name }}</span>
                                     </div>
                                 </div>
-                            @endforeach
+                            </div>
                         </div>
+                    @endforeach
+                </div>
             </div>
             <div class="col-4 ">
                 <div class="card h-100">
@@ -115,20 +115,23 @@
                         <div class="col-4">
                             <div class="mb-3">
                                 <label for="sub_total" class="form-label">Sub Total</label>
-                                <input type="number" name="sub_total" value="{{ $data->sub_total }}" id="sub_total" disabled class="form-control">
+                                <input type="text" name="sub_total_display" id="sub_total_display" value='{{ $data->sub_total }}' disabled class="form-control currency-format">
+                                <input type="hidden" name="sub_total" value="" id="sub_total" disabled class="form-control">
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="mb-3">
                                 <label for="discount" class="form-label">Diskon</label>
-                                <input type="number" name="discount" value="{{ $data->discount }}" id="discount" class="form-control">
+                                <input type="text" name="discount_display" value="{{ $data->discount }}" id="discount_display" class="form-control currency-format">
+                                <input type="hidden" name="discount" value="{{ $data->discount }}" id="discount" class="form-control">
                             </div>
                             
                         </div>
                         <div class="col-4">
                             <div class="mb-3">
                                 <label for="total" class="form-label">TOTAL</label>
-                                <input type="number" name="total" id="total" value="{{ $data->total }}" disabled class="form-control">
+                                <input type="text" name="total_display" value="{{ $data->total }}" id="total_display" class="form-control currency-format">
+                                <input type="hidden" name="total" id="total" value="{{ $data->total }}" disabled class="form-control">
                             </div>
 
                         </div>
@@ -137,11 +140,13 @@
                         <div class="col-4">
                             <div class="mb-3">
                                 <label for="cash_paid" class="form-label">CASH</label>
-                                <input type="number" name="cash_paid" id="cash_paid" value="{{ $data->cash_paid }}" class="form-control">
+                                <input type="text" name="cash_paid_display" value="{{ $data->cash_paid }}" id="cash_paid_display" class="form-control currency-format">
+                                <input type="hidden" name="cash_paid" id="cash_paid" value="{{ $data->cash_paid }}" class="form-control">
                             </div>
                             <div class="mb-3">
                                 <label for="change" class="form-label">Kembali</label>
-                                <input type="number" name="change" id="change" disabled value="{{ $data->change }}" class="form-control">
+                                <input type="text" name="change_display" value="{{ $data->change }}" id="change_display" class="form-control currency-format">
+                                <input type="hidden" name="change" id="change" disabled value="{{ $data->change }}" class="form-control">
                             </div>
                         </div>
                         <div class="col">
@@ -213,16 +218,22 @@
 
                     const setTransactionTotal = ()=>{
                         totalEl.value = (Number(subTotalModalEl.value) || 0) - (Number(discountEl.value) || 0);
+                        let total = $('#total').val();
+                        let cash_paid = $('#cash_paid').val();
+                        
+                        $('#total_display').val(formatRupiah(total));
+                        $('#change').val(cash_paid - total);
                         // trigger total change event
-                        $('#total').trigger('change');
+                        // $('#total').trigger('change');
                     }
 
                     const setTransactionSubTotal = ()=>{
                         let subTotal = productList.reduce((accumulator,currentValue) => Number(accumulator) + Number(currentValue.total), 0);
 
                         console.log(subTotal)
-                        subTotalEl.innerText = subTotal;
+                        subTotalEl.innerText = formatRupiah(subTotal);
                         subTotalModalEl.value = subTotal;
+                        $('#sub_total_display').val(formatRupiah(subTotal))
 
                         setTransactionTotal();
                     }
@@ -261,7 +272,7 @@
                                     <div class="col-md-8">
                                         <h6 class="mb-1 fw-bold text-dark">${product.name}</h6>
                                         <div class="text-muted mb-2 flex items-center">
-                                            Rp ${product.price} / ${product.unit} 
+                                            Rp ${formatRupiah(product.price)} / ${product.unit} 
                                             <div class="ml-2 dropdown">
                                                 <button class="btn btn-xs btn-outline-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                     <i class="fas fa-pen text-xs"></i>
@@ -282,7 +293,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-end flex justify-content-end align-items-center">
-                                        <div class="font-bold text-success mb-2 text-lg text-nowrap">Rp ${product.total}</div>
+                                        <div class="font-bold text-success mb-2 text-lg text-nowrap">Rp ${formatRupiah(product.total)}</div>
                                     </div>
                                     <button class="absolute bottom-0 right-0 btn btn-sm btn-outline-danger btn-delete-item-detail" data-code="${product.code}">
                                         <i class="fas fa-trash text-xs btn-delete-item-detail" data-code="${product.code}"></i>
@@ -432,12 +443,20 @@
                         setTransactionSubTotal();
                     })
 
+                    $('#discount_display').on('input',()=>{
+                        discountEl.dispatchEvent(new Event('input'));
+                    })
+                    $('#cash_paid_display').on('input',()=>{
+                        document.getElementById('cash_paid').dispatchEvent(new Event('input'));
+                    })
+
 
                     $('#cash_paid, #total').on('input',function(){
                         let total = $('#total').val();
                         let cash_paid = $('#cash_paid').val();
 
                         $('#change').val(cash_paid - total);
+                        $('#change_display').val(formatRupiah(cash_paid - total));
                     });
 
                     $('#total').change(function(){
